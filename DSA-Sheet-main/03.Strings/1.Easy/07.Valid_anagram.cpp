@@ -44,3 +44,28 @@ bool isAnagram(string s, string t) {
 Time complexity: O(max(s.length(), t.length()))
 Space complexity: O(s.length())
 */
+
+
+
+/*                              optimal approach
+Approach: Just count the frequency of every element in Str1 and iterate through Str2 and decrease the count of every element in the frequency array.
+Now iterate again, if the frequency at any point is not 0 this means, strings are not anagrams of each other.
+*/
+
+ int freq[26] = {0};
+        for (int i = 0; i < s.length(); i++) {
+            freq[toupper(s[i]) - 'A']++;
+        }
+        for (int i = 0; i < t.length(); i++) {
+            freq[toupper(t[i]) - 'A']--;
+        }
+        for (int i = 0; i < 26; i++) {
+            if (freq[i] != 0)
+            return false;
+            }
+        return true;
+
+   /*         
+      tc = O(N)
+      sc = O(1)
+      */
