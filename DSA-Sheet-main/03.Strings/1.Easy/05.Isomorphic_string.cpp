@@ -41,3 +41,39 @@ Space Complexity: O(m), where m is the number of unique characters in the input 
 - The space complexity can also be considered as O(1) since the maximum number of unique characters is limited (26 English alphabets).
 */
 
+
+/*                          optimal approach                      */
+
+
+/*
+Algorithm
+Think of isomorphism as a consistent one-to-one mapping between characters of two strings.
+The goal is to ensure the pattern of appearances and repetitions is identical in both strings.
+Use two fixed-size arrays (size 256) to track the last-seen positions of characters from each string.
+While scanning both strings together, compare if the characters at the current position have been seen at the same relative positions before.
+If not, it indicates inconsistent mapping — one character maps to multiple others — return false.
+If consistent, update the last seen position of both characters to ensure future checks remain valid.
+This approach confirms isomorphic structure by comparing character occurrence patterns, not the characters themselves.
+
+
+code :
+*/
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int m1[256] = {0}, m2[256] = {0}; 
+          int n = s.size(); 
+          for (int i = 0; i < n; ++i) {
+              if (m1[s[i]] != m2[t[i]]) return false;
+              m1[s[i]] = i + 1;
+              m2[t[i]] = i + 1;
+          }
+          return true;
+    }
+};
+
+
+/*
+    tc = O(N)
+    sc = O(1)
+*/
