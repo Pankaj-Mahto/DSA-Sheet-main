@@ -68,3 +68,32 @@ int atoi(string str)
         return -1 * ans;
     return ans;
 }
+
+/*                                           optimal solution */
+
+
+
+   
+int myatoi(string s) {
+      int i = 0, n = s.size();
+        while (i < n && s[i] == ' ')
+            i++;
+        int sign = 1;
+        if (i < n && (s[i] == '+' || s[i] == '-')) {
+            if (s[i] == '-')
+                sign = -1;
+            i++;
+        }
+        return helper(s, i, 0, sign);
+    }
+
+    int helper(const string& s, int i, long result, int sign) {
+        if (i >= s.size() || !isdigit(s[i]))
+            return (int)(result * sign);
+        int digit = s[i] - '0';
+        if (result > (INT_MAX - digit) / 10)
+            return (sign == 1) ? INT_MAX : INT_MIN;
+        result = result * 10 + digit;
+        return helper(s, i + 1, result, sign);
+    }
+
