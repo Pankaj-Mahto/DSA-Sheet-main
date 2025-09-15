@@ -1,66 +1,77 @@
+
 **Question:**
-Generate all binary strings of length `N`.
+Generate all binary strings of length `n` such that no two consecutive `1`s appear.
+
+---
 
 **Keypoints that summarize the approach:**
 
 * Use **recursion + backtracking**.
-* At each index, you can place either `'0'` or `'1'`.
-* Recurse until the string length = `N`, then print/store it.
-* This ensures all `2^N` possible binary strings are generated.
+* At each step, you can always place `'0'`.
+* You can place `'1'` **only if the last character is not `'1'`**.
+* Continue until the current string length = `n`.
+* Store the string when a valid one is formed.
 
 ---
 
 **Example:**
 
-Input: `N = 3`
-Possible binary strings:
+Input: `n = 3`
+Valid binary strings (no consecutive 1s):
 
 ```
 000  
 001  
 010  
-011  
 100  
-101  
-110  
-111
+101
 ```
 
-Output: `["000", "001", "010", "011", "100", "101", "110", "111"]`
+Output: `["000", "001", "010", "100", "101"]`
 
 ---
 
 **Code:**
 
-#include <bits/stdc++.h>
-using namespace std;
+```cpp
+// User function Template for C++
 
-void generateBinary(int n, string current, vector<string>& result) {
-    if (current.size() == n) {
-        result.push_back(current);
-        return;
+class Solution {
+  public:
+    vector<string> generateBinaryStrings(int n) {
+        vector<string> res;
+        string cur;
+        generateNoConsec(n, cur, res);
+        return res;
     }
-    generateBinary(n, current + "0", result);
-    generateBinary(n, current + "1", result);
-}
+    
+  private:
+    void generateNoConsec(int n, string &cur, vector<string> &res) {
+        if ((int)cur.size() == n) {
+            res.push_back(cur);
+            return;
+        }
+        // Always allow '0'
+        cur.push_back('0');
+        generateNoConsec(n, cur, res);
+        cur.pop_back();
 
-vector<string> generateAllBinaryStrings(int n) {
-    vector<string> result;
-    generateBinary(n, "", result);
-    return result;
-}
-
-int main() {
-    int n = 3;
-    vector<string> res = generateAllBinaryStrings(n);
-    for (auto &str : res)
-        cout << str << " ";
-    return 0;
-}
+        // Allow '1' only if last character isn't '1'
+        if (cur.empty() || cur.back() != '1') {
+            cur.push_back('1');
+            generateNoConsec(n, cur, res);
+            cur.pop_back();
+        }
+    }
+};
 ```
 
 ---
 
-**Time Complexity:** O(2^N) → Each binary string is generated.
-**Space Complexity:** O(N) (recursion stack depth).
+**Time Complexity:** O(2^n) in worst case (though fewer strings are valid).
+**Space Complexity:** O(n) recursion stack.
 
+---
+
+✅ Your code is correct.
+Would you like me to also draw the **recursion tree for n=3** so you can see how strings like `101` and `010` are formed?
