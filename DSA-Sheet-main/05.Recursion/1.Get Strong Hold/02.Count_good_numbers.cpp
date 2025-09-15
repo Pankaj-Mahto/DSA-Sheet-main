@@ -43,3 +43,38 @@ int countGoodNumbers(long long n) {
     else
         return (countGoodNumbers(n - 1) % mod * 5 % mod);
 }
+
+/*                    optimal solution     
+
+Keypoints that summarize the approach:
+Even positions → 5 choices. Odd positions → 4 choices.
+Number of even positions = ceil(n/2), odd positions = floor(n/2)
+Result = 5𝑒𝑣𝑒𝑛𝑃𝑜𝑠 × 4𝑜𝑑𝑑𝑃𝑜𝑠 mod (1𝑒9+7).
+Use fast exponentiation to compute powers efficiently in O(log n).
+*/
+class Solution {
+private:
+    const long long mod = 1e9 + 7;
+
+    long long power(long long base, long long exp) {
+        long long res = 1;
+        while (exp > 0) {
+            if (exp % 2 == 1)
+                res = (res * base) % mod;
+            base = (base * base) % mod;
+            exp /= 2;
+        }
+        return res;
+    }
+
+public:
+    int countGoodNumbers(long long n) {
+        long long evenPos = (n + 1) / 2; // ceil(n/2)
+        long long oddPos = n / 2;        // floor(n/2)
+        long long ans = (power(5, evenPos) * power(4, oddPos)) % mod;
+        return (int)ans;
+    }
+};
+
+/*                        tc = O( NlogN )
+                          sc = O( 1 )
