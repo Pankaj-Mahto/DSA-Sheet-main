@@ -55,3 +55,64 @@ vector<vector<int>> subsetsWithDup(vector<int>& nums) {
 	solve(0, nums, temp, ans);
 	return ans;
 }
+
+
+
+
+
+
+
+/*
+## ⚠️ But There’s a Small Issue
+
+You are **adding subsets only when `index == nums.size()`**.
+👉 This means subsets like `[ ]`, `[1]`, `[2]`, etc., will **only appear if recursion goes all the way to the end**.
+
+A cleaner and more standard approach is:
+
+* Push the **current subset at every recursion call**, not just at the leaf.
+  That way, subsets are generated *on the fly*.
+
+---
+
+## 🔧 Fixed Version of Your Code
+
+Here’s a slightly modified version that’s more intuitive and commonly used:
+*/
+```cpp
+void solve(int start, vector<int>& nums, vector<int>& temp, vector<vector<int>>& ans) {
+    ans.push_back(temp); // ✅ add subset at every step
+
+    for(int i = start; i < nums.size(); i++) {
+        // Skip duplicates
+        if(i > start && nums[i] == nums[i-1]) continue;
+
+        // Include nums[i]
+        temp.push_back(nums[i]);
+        solve(i+1, nums, temp, ans);
+        temp.pop_back(); // backtrack
+    }
+}
+
+vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+    sort(nums.begin(), nums.end()); // sort to handle duplicates
+    vector<vector<int>> ans;
+    vector<int> temp;
+    solve(0, nums, temp, ans);
+    return ans;
+}
+```
+
+---
+
+/* ## 🔍 Why This Fix?
+
+* **Your version**: Adds subsets only when reaching the end (`index == nums.size()`), which works but is less intuitive.
+* **Fixed version**: Adds subsets at every step, ensuring no subset is missed and recursion tree is more natural.
+
+Both approaches are valid ✅, but the **second one is cleaner and easier to reason about**.
+
+---
+
+👉 Do you want me to also **draw the recursion tree** (like I did earlier) for `nums = [1,2,2]`, so you can visually see how duplicates are skipped?
+*/
